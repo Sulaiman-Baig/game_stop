@@ -10,5 +10,5 @@ const userController = require('../controllers/user');
  router.post('/mailsend' , userController.forgotPassword);
  router.get('/getbyId/:id' , userController.getById);
  router.get('/getall' , userController.getAll);
- router.post('/socailLogin' , userController.socailLogin);
+
 module.exports = router;

@@ -133,7 +133,6 @@ module.exports = {
 
             const {
                 name,
-                email,
                 address,
                 zipcode,
                 country,
@@ -143,7 +142,6 @@ module.exports = {
 
             Admin.update({
                 name: name,
-                email: email,
                 address: address,
                 zipcode: zipcode,
                 country: country,

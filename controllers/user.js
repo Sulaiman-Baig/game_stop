@@ -6,12 +6,7 @@ const sequelize = require("sequelize");
 const Op = sequelize.Op;
 
 const {
-    User,
-    Follower,
-    Following,
-    Friend,
-    Friendship,
-    Conversation
+    User
 } = require('../database/database');
 
 module.exports = {
@@ -21,13 +16,14 @@ module.exports = {
             const {
                 name,
                 email,
+                address,
+                zipcode,
+                country,
+                city,
                 password,
-                gender,
-                description,
-                isArtist,
-                profile_pic,
-                cover_pic
+                imageUrl
             } = req.body;
+
             User.findOne({
                 where: {
                     email: email
@@ -39,30 +35,29 @@ module.exports = {
                     });
                 } else {
                     User.create({
-                            name: name,
-                            email: email,
-                            password: hashedpassword.generate(password),
-                            gender: gender,
-                            description: description,
-                            isArtist: isArtist,
-                            profile_pic: profile_pic,
-                            cover_pic: cover_pic
-                        })
+                        name: name,
+                        email: email,
+                        password: hashedpassword.generate(password),
+                        address: address,
+                        zipcode: zipcode,
+                        country: country,
+                        city: city,
+                        imageUrl: imageUrl
+                    })
                         .then((createdUser) => {
                             const token = jwt.sign({
-                                    email: req.body.email,
-                                    userId: createdUser.id
-                                },
+                                email: req.body.email,
+                                userId: createdUser.id
+                            },
                                 "very-long-string-for-secret", {
-                                    expiresIn: 3000
-                                });
+                                expiresIn: 3000
+                            });
 
                             res.json({
-                                message: "AutoSigin successfully",
+                                message: "AutoSignin successfully",
                                 token: token,
                                 user: createdUser
                             })
-                            return res.status(http_status_codes.CREATED).json(user);
                         })
                         .catch((err) => {
                             console.log(err)
@@ -89,12 +84,12 @@ module.exports = {
                 );
                 if (verify_password) {
                     const token = jwt.sign({
-                            email: req.body.email,
-                            userId: isUserExist.id
-                        },
+                        email: req.body.email,
+                        userId: isUserExist.id
+                    },
                         "very-long-string-for-secret", {
-                            expiresIn: 3000
-                        });
+                        expiresIn: 3000
+                    });
 
                     res.json({
                         message: "Sigin successfully",
@@ -147,20 +142,20 @@ module.exports = {
 
             const {
                 name,
-                gender,
-                description,
-                isArtist,
-                profile_pic,
-                cover_pic
+                address,
+                zipcode,
+                country,
+                city,
+                imageUrl
             } = req.body
 
             User.update({
                 name: name,
-                gender: gender,
-                description: description,
-                isArtist: isArtist,
-                profile_pic: profile_pic,
-                cover_pic: cover_pic
+                address: address,
+                zipcode: zipcode,
+                country: country,
+                city: city,
+                imageUrl: imageUrl
             }, {
                 where: {
                     id: id
@@ -213,10 +208,10 @@ module.exports = {
             const newpassword = req.body.newpassword;
 
             User.findOne({
-                    where: {
-                        id: userId
-                    }
-                })
+                where: {
+                    id: userId
+                }
+            })
                 .then((userRes) => {
                     const isAuth = hashedpassword.verify(
                         oldpassword,
@@ -225,8 +220,8 @@ module.exports = {
 
                     if (isAuth) {
                         userRes.update({
-                                password: hashedpassword.generate(newpassword)
-                            })
+                            password: hashedpassword.generate(newpassword)
+                        })
                             .then(() => {
 
                                 res.json({
@@ -264,7 +259,7 @@ module.exports = {
                     service: 'gmail',
                     auth: {
                         user: 'Testermail018@gmail.com',
-                        pass: 'imrankamboh'
+                        pass: 'bfghtgfhb'
                     }
                 });
                 var mailOptions = {
@@ -298,38 +293,7 @@ module.exports = {
     },
 
 
-    async socailLogin(req, res, next) {
-        const reqData = req.body;
-        console.log(req.body, '=======================')
-        User.findOne({
-            where: {
-                email: req.body.email
-            }
-        }).then(isUser => {
-            if (isUser === null) {
-                User.create({
-                    name: req.body.name,
-                    email: req.body.email,
-                    password: hashedpassword.generate(req.body.password)
-                }).then((z) => {
-                    res.json({
-                        data: z,
-                        message: 'New'
-                    })
-                })
-            } else {
-
-                res.json({
-                    data: isUser,
-                    message: 'old'
-                })
-
-            }
-        }).catch(err => {
-            console.log(err);
-            res.json("Some Error Occured!");
-        });
-    },
+   
 
 
 };
