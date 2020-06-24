@@ -8,11 +8,13 @@ module.exports = (sequelize, type) => {
         },
         name: type.STRING,
         email: type.STRING,
-        gender: type.STRING,
+        address: type.STRING,
+        zipcode: type.STRING,
+        country: type.STRING,
+        city: type.STRING,
         password: type.STRING,
-        description: type.STRING,
-        profile_pic: type.STRING,
-        cover_pic: type.STRING
-
+        imageUrl: type.STRING,
+        isBlocked: type.BOOLEAN,
     });
+   
 };

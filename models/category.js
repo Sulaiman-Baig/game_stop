@@ -6,7 +6,9 @@ module.exports = (sequelize, type) => {
             autoIncrement: true,
             required: true
         },
-        name: type.STRING
+        eng_title: type.STRING,
+        arbic_title: type.STRING,
+        imageUrl: type.STRING,
 
-    });
+    });   
 };

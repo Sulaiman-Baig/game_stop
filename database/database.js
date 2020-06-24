@@ -14,7 +14,7 @@ const OrderDetailModel = require("../models/orderdetail");
 
 
 // SEQUELIZE CONNECTION 
-const sequelize = new Sequelize("", "root", "root1234", {
+const sequelize = new Sequelize("gamestop", "root", "root1234", {
 host: "localhost",
 dialect: "mysql",
 // operatorsAliases: false,

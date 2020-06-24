@@ -6,10 +6,13 @@ module.exports = (sequelize, type) => {
             autoIncrement: true,
             required: true
         },
-        name: type.STRING,
-        price: type.STRING,
+        eng_title: type.STRING,
+        arbic_title: type.STRING,
         quantity: type.INTEGER,
-        description: type.STRING,
-        imageUrl: type.STRING
-    });
+        eng_description: type.STRING,
+        arbic_description: type.STRING,
+        price: type.STRING,
+        arbic_description: type.STRING,
+        review_stars: type.INTEGER,
+    });    
 };
