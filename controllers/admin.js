@@ -17,11 +17,12 @@ module.exports = {
             const {
                 name,
                 email,
+                address,
+                zipcode,
+                country,
+                city,
                 password,
-                gender,
-                description,
-                profile_pic,
-                cover_pic
+                imageUrl
             } = req.body;
             Admin.findOne({
                 where: {
@@ -35,26 +36,26 @@ module.exports = {
                         name: name,
                         email: email,
                         password: hashedpassword.generate(password),
-                        gender: gender,
-                        description: description,
-                        profile_pic: profile_pic,
-                        cover_pic: cover_pic
+                        address: address,
+                        zipcode: zipcode,
+                        country: country,
+                        city: city,
+                        imageUrl: imageUrl
                     })
                         .then((createdAdmin) => {
                             const token = jwt.sign({
                                 email: req.body.email,
-                                AdminId: createdAdmin.id
+                                adminId: createdAdmin.id
                             },
                                 "very-long-string-for-secret", {
                                 expiresIn: 3000
                             });
-
                             res.json({
-                                message: "AutoSigin successfully",
+                                message: "AutoSignin successfully",
                                 token: token,
-                                Admin: createdAdmin
+                                admin: createdAdmin
                             })
-                            return res.status(http_status_codes.CREATED).json(Admin);
+
                         })
                         .catch((err) => { console.log(err) });
                 }
@@ -77,7 +78,7 @@ module.exports = {
                 const verify_password = hashedpassword.verify(
                     req.body.password, isAdminExist.password
                 );
-                if (req.body.password === isAdminExist.password) {
+                if (verify_password) {
                     const token = jwt.sign({
                         email: req.body.email,
                         adminId: isAdminExist.id
@@ -87,7 +88,7 @@ module.exports = {
                     });
 
                     res.json({
-                        message: "Sigin successfully",
+                        message: "Signin successfully",
                         token: token,
                         admin: isAdminExist
                     })
@@ -132,18 +133,22 @@ module.exports = {
 
             const {
                 name,
-                gender,
-                description,
-                profile_pic,
-                cover_pic
+                email,
+                address,
+                zipcode,
+                country,
+                city,
+                imageUrl
             } = req.body
 
             Admin.update({
                 name: name,
-                gender: gender,
-                description: description,
-                profile_pic: profile_pic,
-                cover_pic: cover_pic
+                email: email,
+                address: address,
+                zipcode: zipcode,
+                country: country,
+                city: city,
+                imageUrl: imageUrl
             }, {
                 where: {
                     id: id
@@ -153,7 +158,6 @@ module.exports = {
                 message: "Updated sussessfully"
             })
         } catch (error) {
-
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "an error occured"
             })
@@ -162,13 +166,10 @@ module.exports = {
 
     async updatePassword(req, res, next) {
         try {
-
             id = req.params.id;
-
             const {
                 password
             } = req.body
-
             Admin.update({
                 password: hashedpassword.generate(password)
             }, {
@@ -176,13 +177,10 @@ module.exports = {
                     id: id
                 }
             })
-
             return res.status(http_status_codes.OK).json({
                 message: "Updated sussessfully"
             })
-
         } catch (error) {
-
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "An error occured"
             })
@@ -222,7 +220,7 @@ module.exports = {
         } catch (error) {
 
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Fetching All Approved"
+                message: "Error Occurd in reseting password"
             });
         }
     },
@@ -239,12 +237,12 @@ module.exports = {
                     service: 'gmail',
                     auth: {
                         admin: 'Testermail018@gmail.com',
-                        pass: 'imrankamboh'
+                        pass: 'fghghfhrfg'
                     }
                 });
                 var mailOptions = {
                     from: ' ', // sender address
-                    to: Adminmail, // list of receivers
+                    to: adminmail, // list of receivers
                     subject: 'Admin Password Verification Code', // Subject line
                     text: 'Here is a code to setup your password again', // plain text body
                     html: 'Hi Dear Admin <br>Please verify your email using the link below and get back your password! <b style="font-size:24px;margin-left:30px"> Your code - ' + (isAdmin.id) * 109786 + '<b>' // html body

@@ -63,9 +63,9 @@ Product.hasMany(OrderDetail, { foreignKey: 'productId', sourceKey: 'id' });
 
 
 // TO UPDATE SCHEMA
-sequelize.sync({ alter: true }).then(() => {
-console.log(`Database & tables created!`);
-});
+// sequelize.sync({ alter: true }).then(() => {
+// console.log(`Database & tables created!`);
+// });
 
 
 
