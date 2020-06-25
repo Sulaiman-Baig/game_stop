@@ -1,24 +1,48 @@
 const http_status_codes = require('http-status-codes');
 const {
 
-    Category,
-    SubCategory
-    } = require('../database/database');
+    Category
+} = require('../database/database');
 module.exports = {
 
     async createCategory(req, res, next) {
         try {
-            const adminId = req.params.adminId;
 
             const {
-                _name
+                eng_title,
+                arbic_title,
+                imageUrl
             } = req.body;
 
             const category = await Category.create({
-                name: _name,
-                adminId: adminId
+                eng_title: eng_title,
+                arbic_title: arbic_title,
+                imageUrl: imageUrl,
+                categoryId: null
             });
-            return res.status(http_status_codes.CREATED).json(category);
+            return res.status(http_status_codes.CREATED).json({ message: 'Category created successfully' });
+        } catch (err) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "Error Occurd in Creating Category"
+            });
+        }
+    },
+
+    async createSubCategory(req, res, next) {
+        try {
+            const {
+                eng_title,
+                arbic_title,
+                imageUrl
+            } = req.body;
+            categoryId = req.params.id;
+            const category = await Category.create({
+                eng_title: eng_title,
+                arbic_title: arbic_title,
+                imageUrl: imageUrl,
+                categoryId: categoryId
+            });
+            return res.status(http_status_codes.CREATED).json({ message: 'SubCategory created successfully' });
         } catch (err) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "Error Occurd in Creating Category"
@@ -29,11 +53,17 @@ module.exports = {
     async updateCategory(req, res, next) {
         try {
             const {
-                _name
+                eng_title,
+                arbic_title,
+                imageUrl
             } = req.body;
+
             categoryId = req.params.id;
+
             const category = await Category.update({
-                name: _name
+                eng_title: eng_title,
+                arbic_title: arbic_title,
+                imageUrl: imageUrl
             }, {
                 where: {
                     id: categoryId
@@ -67,8 +97,8 @@ module.exports = {
 
     async getAllCategories(req, res, next) {
         try {
-            const category = await Category.findAll();
-            return res.status(http_status_codes.OK).json(category);
+            const categories = await Category.findAll();
+            return res.status(http_status_codes.OK).json(categories);
         } catch (err) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "Error Occurd in Fetching All Category"
@@ -96,16 +126,10 @@ module.exports = {
     },
     async getAllSubCategories(req, res, next) {
         try {
-            let catid = req.params.catId
-            const subCategories = await SubCategory.findAll({
-                where: {categoryId:catid}
-            }, 
-            // {
-            //     include: {
-            //         model: SubCategory
-            //     }
-            // }
-            );
+            let catId = req.params.catId
+            const subCategories = await Category.findAll({
+                where: { categoryId: catid }
+            });
             return res.status(http_status_codes.OK).json(subCategories);
         } catch (err) {
             console.log(res)

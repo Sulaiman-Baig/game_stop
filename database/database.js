@@ -4,8 +4,8 @@ const Sequelize = require('sequelize');
 const AdminModel = require("../models/admin");
 const UserModel = require("../models/user");
 const CategoryModel = require("../models/category");
-const SubCategoryModel = require("../models/subcategory");
 const ProductModel = require("../models/product");
+const ProductImageModel = require("../models/product-images");
 const OrderModel = require("../models/order");
 const OrderDetailModel = require("../models/orderdetail");
 
@@ -30,8 +30,8 @@ idle: 10000
 const User = UserModel(sequelize, Sequelize);
 const Admin = AdminModel(sequelize, Sequelize);
 const Category = CategoryModel(sequelize, Sequelize);
-const SubCategory = SubCategoryModel(sequelize, Sequelize);
 const Product = ProductModel(sequelize, Sequelize);
+const ProductImage = ProductImageModel(sequelize, Sequelize);
 const Order = OrderModel(sequelize, Sequelize);
 const OrderDetail = OrderDetailModel(sequelize, Sequelize);
 
@@ -40,23 +40,23 @@ const OrderDetail = OrderDetailModel(sequelize, Sequelize);
 
 // RELATIONS
 
-Category.belongsTo(Admin);
-Admin.hasMany(Category, { foreignKey: 'adminId', sourceKey: 'id' });
+Category.belongsTo(Category);
+Category.hasMany(Category, { foreignKey: 'categoryId', sourceKey: 'id' });
 
-SubCategory.belongsTo(Category);
-Category.hasMany(SubCategory, { foreignKey: 'categoryId', sourceKey: 'id' });
+Product.belongsTo(Category);
+Category.hasMany(Product, { foreignKey: 'categoryId', sourceKey: 'id' });
 
-Product.belongsTo(SubCategory);
-SubCategory.hasMany(Product, { foreignKey: 'subcategoryId', sourceKey: 'id' });
+ProductImage.belongsTo(Product);
+Product.hasMany(ProductImage, { foreignKey: 'productId', sourceKey: 'id' });
 
-Order.belongsTo(User);
-User.hasMany(Order, { foreignKey: 'userId', sourceKey: 'id' });
+// Order.belongsTo(User);
+// User.hasMany(Order, { foreignKey: 'userId', sourceKey: 'id' });
 
-OrderDetail.belongsTo(Order);
-Order.hasMany(OrderDetail, { foreignKey: 'orderId', sourceKey: 'id' });
+// OrderDetail.belongsTo(Order);
+// Order.hasMany(OrderDetail, { foreignKey: 'orderId', sourceKey: 'id' });
 
-OrderDetail.belongsTo(Product);
-Product.hasMany(OrderDetail, { foreignKey: 'productId', sourceKey: 'id' });
+// OrderDetail.belongsTo(Product);
+// Product.hasMany(OrderDetail, { foreignKey: 'productId', sourceKey: 'id' });
 
 
 
@@ -74,8 +74,8 @@ module.exports = {
 User,
 Admin,
 Category,
-SubCategory,
 Product,
+ProductImage,
 Order,
 OrderDetail
 

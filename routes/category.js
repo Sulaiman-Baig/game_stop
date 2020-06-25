@@ -3,7 +3,8 @@ var router = express.Router();
 const categoryController = require('../controllers/category');
 
 
-router.post('/create/:adminId', categoryController.createCategory );
+router.post('/create', categoryController.createCategory );
+router.post('/create/:id', categoryController.createSubCategory );
 router.post('/update/:id', categoryController.updateCategory );
 router.post('/delete/:id', categoryController.deleteCategory );
 router.get('/get/:id', categoryController.getCategory );
